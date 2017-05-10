@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/public/index.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/config/app.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/.env</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/config/database.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/database/migrations/2014_10_12_000000_create_users_table.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/routes/web.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/routes/api.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/app/Http/Controllers/UsersController.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/app/Models/User.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/app/Repositories/Users/UsersInterface.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/app/Repositories/Users/UsersRepo.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/app/Providers/AppServiceProvider.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/app/Services/Users/UsersService.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/app/Services/Users/UsersFacade.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/composer.json</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/vendor/composer/autoload_classmap.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/vendor/composer/autoload_static.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/app/Http/Controllers/Auth/RegisterController.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/config/auth.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/config/services.php</file>
+            <file>file:/D:/Andres%20Hernandez/Documents/AutoAprendizaje/Laravel/primerjesusconde_git/jesusconde1/database/factories/ModelFactory.php</file>
+        </group>
+    </open-files>
+</project-private>
