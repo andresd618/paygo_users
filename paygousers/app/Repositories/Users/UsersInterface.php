@@ -16,14 +16,22 @@ interface UsersInterface {
     //put your code here
     
     
-    public function findAll();
+    //Obtiene los usuarios paginados y ordenados
+    public function findUsersPag($col, $type, $num);
     
-    public function create();
+    ///Guarda un nuevo usuario
+    public function store(array $data);
     
-    public function show();
+    private function validateDataUser(array $data);
     
-    public function delete();
+    ///Obtiene la informacion de un usuario
+    public function getById($id);
     
-    public function update();
+    //Elimina un usuario
+    public function delete($id );
     
+    ///Actualiza la informacion de un usuario
+    public function update(array $data);
+ 
+    public function truncate();
 }

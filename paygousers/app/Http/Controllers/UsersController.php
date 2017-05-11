@@ -25,37 +25,37 @@ class UsersController extends Controller
         return "Este es el index";
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        
-    }
+   
 
     /**
-     * Store a newly created resource in storage.
+     * Almacena los usuarios que contiene el archivo CSV que llega como parametro
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {     
+        $response = null;               
+        
+        //Se valida el archivo
+        $validator = $this->validate($request,[
+            'file' => 'required|file|mimes:csv,txt',
+        ]);                
+        
+        //Si el archivo es valido se cargan los usuarios
+        if(!$validator->fails() && Input::hasFile('file') && Input::file('file')->isValid()){
+                        
+            $response = $this->usersService->usersFromCSV(Input::file('file'));
+         
+        }else{
+            $response = response()->json(['status' => false,'msg' => 'El archivo CSV no es valido'],500);
+            Log::critical("El archivo CSV no es valido {$e->getCode()}; {$e->getLine()},{$e->getMessage()}" );            
+        }
+        
+        return response()->json($responseObj,$statusHTTP);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -75,7 +75,7 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserFormRequest $request, $id)
     {
         //
     }
@@ -89,5 +89,11 @@ class UsersController extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+    
+    public function trunctate(){                
+        
+        return $this->usersService->truncate();
     }
 }
