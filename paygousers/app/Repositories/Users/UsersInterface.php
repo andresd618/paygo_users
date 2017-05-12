@@ -17,18 +17,22 @@ interface UsersInterface {
     
     
     //Obtiene los usuarios paginados y ordenados
-    public function findUsersPag($col, $type, $num);
+    public function findUsersPag( $num, $typeOrd, $col, $page);
     
     ///Guarda un nuevo usuario
-    public function store(array $data);
+    public function store($data);
     
-    private function validateDataUser(array $data);
+    ///Realiza insert multiple de usuarios
+    public function storeBulk(array $data);
+    
+    ///Valida la informacion para crear/actualizar un usuario
+    public function validateDataUser($data);
     
     ///Obtiene la informacion de un usuario
     public function getById($id);
     
     //Elimina un usuario
-    public function delete($id );
+    public function destroy($userIds );
     
     ///Actualiza la informacion de un usuario
     public function update(array $data);

@@ -17,7 +17,21 @@ use Illuminate\Http\Request;
 //    return $request->user();
 //})->middleware('auth:api');
 
-Route::resource('users','UsersController',['only' =>[
-    'index','store','show','update','destroy'
-]]);
+    Route::get('users/index/{num}/{typeord}/{col}/{page}','UsersController@index')
+                ->where([
+                    'typeord' => '[A-Za-z]+',
+                    'num' => '[0-9]+',
+                    'col' => '[A-Za-z_]+',
+                    'page' => '[0-9]+'
+                ]);
+
+    Route::get('users/{id}','UsersController@show');
+    
+    Route::delete('users','UsersController@destroy');
+       
+    Route::delete('users/truncate','UsersController@truncate');
+        
+    Route::put('users','UsersController@update');
+        
+    Route::post('users','UsersController@store');
 

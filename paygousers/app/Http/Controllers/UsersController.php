@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Input;
+use Validator;
 use Illuminate\Http\Request;
 use App\Services\Users\UsersService;
 
@@ -15,14 +17,20 @@ class UsersController extends Controller
         $this->usersService = $usersService;
     }
     
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    
+     
+   /**
+    * Retorna un listado de usuarios paginados y ordenados segun los parametros
+    * 
+    * @param type $num : Indica la cantidad de usarios a retornar
+    * @param type $typeOrd : Indica el tipo de ordenamiento A: Ascendente, D: Descendente
+    * @param type $col : Indica la columna por la cual se realiza el ordenamiento
+    * @param type $page : Pagina de resultados que se va a obtener
+    * @return type
+    */
+    public function index( $num, $typeOrd, $col, $page)
     {
-        return "Este es el index";
+        return $this->usersService->listUsers( $num, $typeOrd, $col, $page);
     }
 
    
@@ -38,35 +46,35 @@ class UsersController extends Controller
         $response = null;               
         
         //Se valida el archivo
-        $validator = $this->validate($request,[
+        $validator = Validator::make($request->all(),[
             'file' => 'required|file|mimes:csv,txt',
         ]);                
         
         //Si el archivo es valido se cargan los usuarios
-        if(!$validator->fails() && Input::hasFile('file') && Input::file('file')->isValid()){
+        if(!$validator->fails() && $request->hasFile('file') && $request->file('file')->isValid()){
                         
-            $response = $this->usersService->usersFromCSV(Input::file('file'));
-         
+            $response = $this->usersService->usersFromCSV($request->file('file'));         
         }else{
             $response = response()->json(['status' => false,'msg' => 'El archivo CSV no es valido'],500);
-            Log::critical("El archivo CSV no es valido {$e->getCode()}; {$e->getLine()},{$e->getMessage()}" );            
+            Log::critical("El archivo CSV no es valido " );            
         }
         
-        return response()->json($responseObj,$statusHTTP);
+        return $response;
     }
 
     
-
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Permite obtener la informacion de un usuario por su id
+     * 
+     * @param type $id : Id del usuario a consultar
+     * @return type
      */
-    public function edit($id)
-    {
-        //
+    public function show($id){                        
+        
+        return $this->usersService->show($id);
     }
+    
+
 
     /**
      * Update the specified resource in storage.
@@ -75,20 +83,36 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserFormRequest $request, $id)
+    public function update($id)
     {
-        //
+        
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Permite eliminar un listado de usuarios de la bd
+     * 
+     * @param type $userIds : Lista de ids de usuarios que se eliminaran
+     * @return type
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy(Request $request)
+    {                
+        $response = null;
+        
+        //Se valida el parametro que sea json o numero
+        $validator = Validator::make($request->all(),[
+            'ids' => 'required|json',
+        ]);  
+        
+        if(!$validator->fails() ){            
+            
+            $userIds = json_decode($request->input("ids"));
+            $response = $this->usersService->destroy($userIds);
+                                     
+        }else{
+            $response = response()->json(["status" => false, "msg" => "El listado de usuarios a eliminar no es valido."],500);
+        }
+        
+        return $response;
     }
     
     
