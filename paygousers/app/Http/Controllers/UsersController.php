@@ -116,7 +116,7 @@ class UsersController extends Controller
     }
     
     
-    public function trunctate(){                
+    public function truncate(){                
         
         return $this->usersService->truncate();
     }

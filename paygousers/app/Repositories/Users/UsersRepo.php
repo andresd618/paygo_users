@@ -13,7 +13,7 @@ use App\Models\User;
 use \Illuminate\Support\Facades\Log;
 use \Illuminate\Database\QueryException;
 use \Illuminate\Pagination\Paginator;
-
+use \Illuminate\Support\Facades\DB;
 
 /**
  * Description of UsersImplement
