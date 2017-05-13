@@ -6,6 +6,7 @@ use Input;
 use Validator;
 use Illuminate\Http\Request;
 use App\Services\Users\UsersService;
+use \App\Http\Requests\UserFormRequest;
 
 class UsersController extends Controller
 {
@@ -43,23 +44,26 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {     
-        $response = null;               
-        
-        //Se valida el archivo
-        $validator = Validator::make($request->all(),[
-            'file' => 'required|file|mimes:csv,txt',
-        ]);                
-        
-        //Si el archivo es valido se cargan los usuarios
-        if(!$validator->fails() && $request->hasFile('file') && $request->file('file')->isValid()){
-                        
-            $response = $this->usersService->usersFromCSV($request->file('file'));         
-        }else{
-            $response = response()->json(['status' => false,'msg' => 'El archivo CSV no es valido'],500);
-            Log::critical("El archivo CSV no es valido " );            
+        if($request->ajax()){
+
+            $response = null;               
+
+            //Se valida el archivo
+            $validator = Validator::make($request->all(),[
+                'file' => 'required|file|mimes:csv,txt',
+            ]);                
+
+            //Si el archivo es valido se cargan los usuarios
+            if(!$validator->fails() && $request->hasFile('file') && $request->file('file')->isValid()){
+
+                $response = $this->usersService->usersFromCSV($request->file('file'));         
+            }else{
+                $response = response()->json(['status' => false,'msg' => 'El archivo CSV no es valido'],500);
+                Log::critical("El archivo CSV no es valido " );            
+            }
+
+            return $response;
         }
-        
-        return $response;
     }
 
     
@@ -83,9 +87,16 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($id)
-    {
+    public function update(UserFormRequest $request, $id)
+    {        
+        if($request->ajax()){
         
+            //Se obtienen los datos de la peticion y se agrega el id del usuario
+            $data = $request->all();
+            $data['id'] = $id;
+
+            return $this->usersService->update((object)$data);
+        }
     }
 
     /**

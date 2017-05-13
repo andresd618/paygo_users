@@ -35,7 +35,7 @@ interface UsersInterface {
     public function destroy($userIds );
     
     ///Actualiza la informacion de un usuario
-    public function update(array $data);
+    public function update($data);
  
     public function truncate();
 }

@@ -14,6 +14,7 @@ use \Illuminate\Support\Facades\Log;
 use \Illuminate\Database\QueryException;
 use \Illuminate\Pagination\Paginator;
 use \Illuminate\Support\Facades\DB;
+use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * Description of UsersImplement
@@ -69,7 +70,7 @@ class UsersRepo implements UsersInterface{
         
         $validate = false;
         
-        if(!empty($data) && !empty(trim($data->name)) && !empty(trim($data->lastname))){
+        if(!empty($data) && !empty($data->id) && !empty(trim($data->name)) && !empty(trim($data->lastname))){
             $validate = true;            
         }
         
@@ -84,6 +85,8 @@ class UsersRepo implements UsersInterface{
      */
     public function store($data){
                 
+        $stored = false;
+        
         if($this->validateDataUser($data)){
             try{
                 $user = $this->userModel->find($data->id);
@@ -96,16 +99,16 @@ class UsersRepo implements UsersInterface{
                     $newUser->name = $data->name;
                     $newUser->lastname = $data->lastname;
 
-                    return $newUser->save();
+                    $stored = $newUser->save();
                 } 
             }catch(QueryException $qex){                
-                Log::critical("Error al crear el usuario {$data['name']} {$data['lastname']}; {$qex->getCode()}; Linea: {$qex->getLine()},{$qex->getMessage()}" );
+                Log::critical("Error al crear el usuario {$data->id}; {$qex->getCode()}; Linea: {$qex->getLine()},{$qex->getMessage()}" );
             }catch(\Exception $ex){
-                Log::critical("Error al crear el usuario {$data['name']} {$data['lastname']}; {$ex->getCode()}; Linea: {$ex->getLine()},{$ex->getMessage()}" );
+                Log::critical("Error al crear el usuario {$data->id}; {$ex->getCode()}; Linea: {$ex->getLine()},{$ex->getMessage()}" );
             }
         }
                 
-        return false;
+        return $stored;
     }
     
     
@@ -179,7 +182,7 @@ class UsersRepo implements UsersInterface{
                 $deleted = $this->userModel->destroy($userIds);
                 
             }catch(Exception $ex){
-                Log::critical("Error al eliminar el listado de usuarios {$userIds};  {$ex->getCode()}; Linea: {$ex->getLine()},{$ex->getMessage()}" );
+                Log::critical("Error al eliminar el listado de usuarios " . print_r($userIds) . ";  {$ex->getCode()}; Linea: {$ex->getLine()},{$ex->getMessage()}" );
             }
         }
         
@@ -188,19 +191,37 @@ class UsersRepo implements UsersInterface{
     
     
     
-    public function update(array $data){
+    /**
+     * Se actualiza los datos de un usuario
+     * 
+     * @param type $data : Objeto que contiene la informacion que se va a asignar al usuario
+     * @return type
+     */
+    public function update($data){
         
-        $user = $this->userModel->findOrFail($id);   
-        
-        if(!is_null($user)){
-            
-            $user->name = $data['name'];
-            $user->lastname = $data['lastname'];
-            
-            return $user->save();
+        $updated = false;
+                            
+        try{
+            if($this->validateDataUser($data)){
+
+                $user = $this->userModel->findOrFail($data->id);                   
+
+                //Se actualiza solo el nombre y el apellido
+                $user->name = $data->name;
+                $user->lastname = $data->lastname;
+
+                $updated = $user->save();
+                
+            }
+        }catch(ModelNotFoundException $mnfe){
+            Log::critical("Error al guardar los cambios realizados al usuario {$data->id}, el usuario no existe;  {$mnfe->getCode()}; Linea: {$mnfe->getLine()},{$mnfe->getMessage()}" );
+        }
+        catch(Exception $ex){
+            Log::critical("Error al guardar los cambios realizados al usuario {$data->id};  {$ex->getCode()}; Linea: {$ex->getLine()},{$ex->getMessage()}" );
         }
         
-        return false;
+        
+        return $updated;
     }
     
     

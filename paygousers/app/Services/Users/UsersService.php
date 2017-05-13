@@ -86,7 +86,7 @@ class UsersService {
                 $created = $this->usersRepo->store($infoUser);                 
                 
             }catch(Exception $ex){
-                Log::critical("Error al crear el usuario {$infoUser}; Linea: {$ex->getLine()},{$ex->getMessage()}" );
+                Log::critical("Error al crear el usuario {$infoUser->id}; Linea: {$ex->getLine()},{$ex->getMessage()}" );
             }
         }
         
@@ -219,6 +219,29 @@ class UsersService {
         
         return response()->json($response, $codeHTTP);
     }
+    
+    
+    /**
+     * Se actualiza los datos de un usuario
+     * 
+     * @param type $data : Objeto que contiene la informacion que se va a asignar al usuario
+     * @return type
+     */
+    public function update($data){
+                
+        $codeHTTP = 200;
+        $response = (object)["status" => true, "msg" => "Se guardaron correctamente los cambios realizados."];                            
+            
+        $update = $this->usersRepo->update($data);
+
+        if(!$update){
+            $codeHTTP = 500;
+            $response->msg = "Error al guardar los cambios realizados del usuario {$data->id}. Verifique si existe.";
+        }        
+        
+        return response()->json($response,$codeHTTP);
+    }
+    
     
     
     

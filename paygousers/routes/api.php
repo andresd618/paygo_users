@@ -31,7 +31,7 @@ use Illuminate\Http\Request;
        
     Route::delete('users/truncate','UsersController@truncate');
         
-    Route::put('users','UsersController@update');
+    Route::put('users/{id}','UsersController@update');
         
     Route::post('users','UsersController@store');
 

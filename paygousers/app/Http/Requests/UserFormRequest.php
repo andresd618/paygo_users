@@ -25,7 +25,7 @@ class UserFormRequest extends FormRequest
     {
         
         return [
-            'id' => 'required|integer',
+           // 'id' => 'required|integer',
             'name' => 'required|string|between:2,50',
             'lastname' => 'required|string|between:2,50',                        
         ];
