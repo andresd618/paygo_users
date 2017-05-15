@@ -70,7 +70,7 @@ class UsersService {
     private function storeUser(array $data){
         
         $created = false;
-        
+            
         if(!empty($data)){
 
             try{
