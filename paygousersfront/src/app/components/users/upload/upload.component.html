@@ -1,5 +1,12 @@
+<div *ngIf="errors">
+    <div class="alert alert-danger" *ngFor="let error of errors">
+        {{ error }}
+    </div>
+</div>
+
 <div>
-  <form #f="ngForm" (ngSubmit) = "onSubmit(f.value)">
+  <form [formGroup]="formUploadUsers" (ngSubmit)="onSubmit()">
+
     <div class="row">
       <div class="col-md-12 col-lg-12">
         <div class="form-group">
@@ -12,32 +19,14 @@
       <div class="col-md-8 col-lg-6">
         <div class="form-group">
           <label for="inputfile">Archivo de usuarios</label>
-          <input type="file" id="inputfile" (change)="getFile()">
+          <input type="file" id="inputfile" (change)="getFile($event)" >
           <p class="help-block">Seleccione un archivo CSV.</p>
         </div>
+      </div>
+      <div class="col-md-3 col-lg-2">
+        <button class="btn btn-default"  type="submit" >Subir</button>
       </div>      
     </div>
 
-    <div class="row">
-      <div class="col-md-6 col-lg-6">
-        <label for="numrecords">Número de registros</label>
-        <input type="email" class="form-control" id="numrecords" placeholder="10" ngModel>
-      </div>
-      <div class="col-md-6 col-lg-6">
-        <label for="tipoorden">Ordenar por nombre</label>
-        <select type="tipoorden" class="form-control" id="tipoorden" ngModel>
-          <option value="asc">Ascendente</option>
-          <option value="desc">Descendente</option>
-        </select>
-      </div>
-    </div>
-    
-    <div class="row"> 
-      <div class="col-md-6 col-lg-6">
-        <button class="btn btn-default"  type="submit" >Procesar</button>
-      </div>
-    </div>
-
-    
   </form>
 </div>

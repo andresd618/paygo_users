@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {ApirestService} from "../../../services/users/apirest.service";
 
-
+import { 
+  FormControl,
+  FormBuilder,  
+  FormGroup  
+} from '@angular/forms';
 
 @Component({
   selector: 'app-list',
@@ -10,17 +14,28 @@ import {ApirestService} from "../../../services/users/apirest.service";
 })
 export class ListComponent implements OnInit {
 
+  formUploadUsers : FormGroup;
   users: Object;
   selectedUser: Object = {};
 
   constructor(private _api : ApirestService) {
+
       this.users = this._api.users$;
-      //this._api.getUsers();
+
+      this.formUploadUsers = new FormGroup({
+        numrecords : new FormControl(),
+        typeorder : new FormControl()
+      });
    }
 
 
 
   ngOnInit() {
+  }
+
+  onSubmit(form : any){
+
+    console.log(form);
   }
 
 }

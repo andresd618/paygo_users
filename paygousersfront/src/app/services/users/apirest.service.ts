@@ -10,7 +10,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class ApirestService {
 
-  apiURL: string = "http://localhost:8000/api/users";
+  apiURL: string = "http://127.0.0.1:8000/api/users";
   headers : Headers = new Headers;
   users$ : Observable<IUser[]>;
 
@@ -27,6 +27,7 @@ export class ApirestService {
 
     this.headers.append('Content-Type', 'x-www-form-urlencoded');
     this.headers.append('X-Requested-Width', 'XMLHttpRequest');
+    this.headers.append('Access-Control-Allow-Headers','content-type');
 
     this.users$ = new Observable( observer => this._usersObserver = observer).share();
     this._dataStore = { users: []};

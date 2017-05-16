@@ -1,3 +1,13 @@
-<p>
-  list works!
-</p>
+<div class="row">
+      <div class="col-md-6 col-lg-6">
+        <label for="numrecords">Número de registros</label>
+        <input type="number"  class="form-control" id="numrecords" placeholder="10" formControlName="numrecords">
+      </div>
+      <div class="col-md-6 col-lg-6">
+        <label for="tipoorden">Ordenar por nombre</label>
+        <select type="typeorder" class="form-control" id="typeorder" formControlName="typeorder">
+          <option value="asc">Ascendente</option>
+          <option value="desc">Descendente</option>
+        </select>
+      </div>
+    </div>
