@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {ApirestService} from "../../../services/users/apirest.service";
+
+
 
 @Component({
   selector: 'app-list',
@@ -7,7 +10,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListComponent implements OnInit {
 
-  constructor() { }
+  users: Object;
+  selectedUser: Object = {};
+
+  constructor(private _api : ApirestService) {
+      this.users = this._api.users$;
+      //this._api.getUsers();
+   }
+
+
 
   ngOnInit() {
   }

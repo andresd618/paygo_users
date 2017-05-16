@@ -228,7 +228,7 @@ class UsersService {
      * @return type
      */
     public function update($data){
-                
+              
         $codeHTTP = 200;
         $response = (object)["status" => true, "msg" => "Se guardaron correctamente los cambios realizados."];                            
             
