@@ -1,28 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import {ApirestService} from "../../../services/users/apirest.service";
-
-import { 
-  FormControl,
-  FormBuilder,  
-  FormGroup  
-} from '@angular/forms';
+import {IUser} from '../../../interfaces/IUser';
+import {Observable} from 'rxjs/Observable';
+import {Observer} from 'rxjs/Observer';
+import { FormControl,FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
-  styleUrls: ['./list.component.css']
+  styleUrls: ['./list.component.css'],
+  providers : [ApirestService]
 })
 export class ListComponent implements OnInit {
 
-  formUploadUsers : FormGroup;
-  users: Object;
-  selectedUser: Object = {};
 
-  constructor(private _api : ApirestService) {
+  formListUsers : FormGroup;   
+  //users$ : Observable<IUser[]>;
+  //private _usersObserver: Observer<IUser[]>;
+  _dataStore: {
+    users : IUser[]
+  };
 
-      this.users = this._api.users$;
 
-      this.formUploadUsers = new FormGroup({
+  constructor(private _api : ApirestService) {      
+
+      this.formListUsers = new FormGroup({
         numrecords : new FormControl(),
         typeorder : new FormControl()
       });
@@ -31,11 +33,30 @@ export class ListComponent implements OnInit {
 
 
   ngOnInit() {
+    //this.users$ = new Observable( observer => this._usersObserver = observer).share();
+    this._dataStore = { users: []};
   }
 
-  onSubmit(form : any){
 
-    console.log(form);
+  getUsers(){
+
+    let numrecords : number = this.formListUsers.get("numrecords").value;
+    let typeorder : string = this.formListUsers.get("typeorder").value;    
+
+    this._api.getUsers(numrecords, 'name', typeorder).subscribe(
+
+      (res) => {
+          
+            this._dataStore.users = res.result.data;
+            //this._usersObserver.next(this._dataStore.users);
+         // this._router.navigate(['/users']);
+        },
+        (error) => {
+          //this.processErrors(error);
+        }
+    );
   }
+
+ 
 
 }

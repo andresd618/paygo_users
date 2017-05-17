@@ -1,3 +1,23 @@
-<p>
-  record works!
-</p>
+
+<tr *ngIf="!isUpdate" (dblclick)="editUser()">
+  <td>{{user.id}}</td>
+  <td>{{user.name}}</td>
+  <td>{{user.lastname}}</td>
+  <td>
+    <div class="checkbox">
+      <label>
+        <input class="chck_delete" type="checkbox" value="">        
+      </label>
+    </div>
+  </td>
+</tr>
+
+
+<tr *ngIf="isUpdate">
+  
+  <td>{{user.id}}</td>
+  <td><input type="text" id="name"   [(ngModel)]="user.name" class="form-control" required></td>
+  <td><input type="text" id="lastname"    [(ngModel)]="user.lastname" class="form-control" required></td>
+  <td><button class="btn btn-primary"  type="button" (click)="saveUser(user)">Guardar</button></td>
+ 
+</tr>

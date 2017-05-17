@@ -1,13 +1,53 @@
-<div class="row">
-      <div class="col-md-6 col-lg-6">
-        <label for="numrecords">Número de registros</label>
-        <input type="number"  class="form-control" id="numrecords" placeholder="10" formControlName="numrecords">
-      </div>
-      <div class="col-md-6 col-lg-6">
-        <label for="tipoorden">Ordenar por nombre</label>
-        <select type="typeorder" class="form-control" id="typeorder" formControlName="typeorder">
-          <option value="asc">Ascendente</option>
-          <option value="desc">Descendente</option>
-        </select>
-      </div>
+<div class="panel panel-default" >
+  <div class="panel-heading">
+    <h3 class="panel-title">Gestionar Usuarios</h3>
+  </div>
+  <div class="panel-body">
+    
+    <div id="form">
+      <form [formGroup]="formListUsers" (ngSubmit)="getUsers()" class="form-inline ">
+          <div class="form-group">
+            <label for="numrecords">Número de registros</label>
+            <input type="number"  class="form-control" id="numrecords" placeholder="10" formControlName="numrecords">
+          </div>
+          <div class="form-group">
+            <label for="tipoorden">Ordenar por nombre</label>
+            <select type="typeorder" class="form-control" id="typeorder" formControlName="typeorder">
+              <option value="asc">Ascendente</option>
+              <option value="desc">Descendente</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary"  type="submit" >Consultar</button>
+          </div>
+      </form>
     </div>
+
+    <div id="listUsers" class="table-responsive" >
+      <table class="table table-hover table-condensed" *ngIf="_dataStore.users && _dataStore.users?.length > 0 ">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th><input class="chckall_delete" type="checkbox" value=""></th>
+          </tr>
+        </thead>
+        <tbody class="app-record"  [user]="user" [isUpdate]="false" *ngFor="let user of _dataStore.users "></tbody>        
+      </table>
+
+      
+
+      
+    </div>
+
+    <div class="alert alert-warning alert-dismissible" role="alert" *ngIf="!_dataStore.users || _dataStore.users?.length == 0" >
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        No se obtuvieron resultados.
+    </div>
+
+  </div>
+</div>
+
+
+

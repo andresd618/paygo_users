@@ -2,7 +2,7 @@ import {Http, Headers, Response} from '@angular/http';
 import { Injectable } from '@angular/core';
 import {IUser} from '../../interfaces/IUser';
 import {Observable} from 'rxjs/Observable';
-import {Observer} from 'rxjs/Observer';
+import 'rxjs/Rx';
 import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/map';
 
@@ -11,44 +11,28 @@ import 'rxjs/add/operator/map';
 export class ApirestService {
 
   apiURL: string = "http://127.0.0.1:8000/api/users";
-  headers : Headers = new Headers;
-  users$ : Observable<IUser[]>;
 
-  private _usersObserver: Observer<IUser[]>;
-  private _dataStore: {
-    users : IUser[]
-  };
-
-
+  
   /**
    * Constructor
    */
   constructor(private _http : Http) { 
 
-    this.headers.append('Content-Type', 'x-www-form-urlencoded');
-    this.headers.append('X-Requested-Width', 'XMLHttpRequest');
-    this.headers.append('Access-Control-Allow-Headers','content-type');
-
-    this.users$ = new Observable( observer => this._usersObserver = observer).share();
-    this._dataStore = { users: []};
   }
 
 
   /**
    * Obtiene los usuarios segun la cantidad de registros a visualizar, el tipo y el campo de ordenamiento
    */
-  public getUsers(num : number, campoOrden : string, tipoOrden : string){
+    public getUsers(num : number, campoOrden : string, tipoOrden : string): Observable<any>{
 
-    this._http
-          .get(this.apiURL)
-          .map(response => response.json())
-          .subscribe(
-            data => {
-              this._dataStore.users = data.items;
-              this._usersObserver.next(this._dataStore.users);
-            }, 
-            error => console.log('Error al obtener los usuarios')
-          );
+        let headers = new Headers();
+        headers.append('Content-Type', 'x-www-form-urlencoded');
+        headers.append('X-Requested-Width', 'XMLHttpRequest');
+
+        return this._http
+                .get(this.apiURL + "/index/" + num + "/" + tipoOrden  + "/" + campoOrden + "/2")
+                .map((res: Response) => res.json());
   }     
 
 
@@ -75,28 +59,22 @@ export class ApirestService {
     );
   }
 
+
+
   /**
-   * Crea los usuarios que incluye el archivo csv 
+   * Crea en bd los usuarios que contiene el archivo csv 
    */
-  public uploadUsers(file : File)
-    {
+  public uploadUsers(file : File) : Observable<any>
+    {        
+        let uploadHeaders : Headers = new Headers;        
+        uploadHeaders.append('Accept', 'application/json');                
+
         let formData : FormData = new FormData();
         formData.append("file", file, file.name);
 
-        return new Promise((resolve, reject) => {
-            this._http.post(this.apiURL, formData, {
-                headers: this.headers
-            })
-            .map((res: Response) => res.json())
-            .subscribe(
-                (res) => {
-                    resolve(res);
-                },
-                (error) => {
-                    reject(error);
-                }
-            );
-        })
+        return this._http
+                    .post(this.apiURL, formData, {headers: uploadHeaders})
+                    .map((res: Response) => res.json());            
     }
 
 
@@ -107,7 +85,7 @@ export class ApirestService {
     {
         return new Promise((resolve, reject) => {
             this._http.put(this.apiURL + "/" + id, user, {
-                headers: this.headers
+                //headers: this.headers
             })
             .map((res: Response) => res.json())
             .subscribe(
@@ -131,19 +109,34 @@ export class ApirestService {
         this._http.delete(this.apiURL,  {
 
             body : {"ids" : ids},
-            headers: this.headers
+            //headers: this.headers
 
         }).subscribe(response => {
 
-            this._dataStore.users.forEach((t, i) => {
+            /*this._dataStore.users.forEach((t, i) => {
 
                 ///Si el id esta en el array de eliminados, se elimina del dataStore
                 if (ids.indexOf(t.id) > -1) { this._dataStore.users.splice(i, 1); }
             });
 
-            this._usersObserver.next(this._dataStore.users);
+            this._usersObserver.next(this._dataStore.users);*/
             
         }, error => console.log('Error al eliminar los usuarios'));
     }
 
+
+    /**
+     * Elimina todos los usuarios registrados en la bd
+     */
+    public deleteAllUsers()
+    {
+        let headers = new Headers();
+        headers.append('Content-Type', 'x-www-form-urlencoded');
+        headers.append('X-Requested-Width', 'XMLHttpRequest');
+
+        return this._http
+                .delete(this.apiURL + "/truncate",  {headers: headers})
+                .map((res: Response) => res.json());  ;
+                
+    }
 }
