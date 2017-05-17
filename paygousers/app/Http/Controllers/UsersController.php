@@ -88,16 +88,29 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserFormRequest $request, $id)
+    public function update(Request $request, $id)
     {        
-        if($request->ajax()){
+//        if($request->ajax()){
+        
+            $response = null;
         
             //Se obtienen los datos de la peticion y se agrega el id del usuario
-            $data = $request->all();
-            $data['id'] = $id;
+            $data = $request->json()->all();
+            
+            $validator = Validator::make($data,[
+                'name' => 'required|string|between:2,50',
+                'lastname' => 'required|string|between:2,50', 
+            ]);  
+            
+            if(!$validator->fails()){
+                $response = $this->usersService->update((object)$data);
+            }else{
+                $response = response()->json(['status' => false,'msg' => 'La informacion del usuario no es válida'],500);
+            }
+            
 
-            return $this->usersService->update((object)$data);
-        }
+            return $response;
+//        }
     }
 
     /**

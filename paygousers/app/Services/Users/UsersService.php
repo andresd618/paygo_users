@@ -1,6 +1,11 @@
 <?php
 
+
+
 namespace App\Services\Users;
+
+ini_set('memory_limit', '512M');
+ini_set('max_execution_time', '0');
 
 use App\Repositories\Users\UsersInterface;
 use \Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -239,6 +244,7 @@ class UsersService {
 
         if(!$update){
             $codeHTTP = 500;
+            $response->status = false;
             $response->msg = "Error al guardar los cambios realizados del usuario {$data->id}. Verifique si existe.";
         }        
         
