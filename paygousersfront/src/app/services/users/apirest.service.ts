@@ -81,22 +81,15 @@ export class ApirestService {
     /**
      * Actualiza la informacion de un usuario
      */
-    public updateUser(user : IUser, id : number)
+    public updateUser(user : IUser) : Observable<any>
     {
-        return new Promise((resolve, reject) => {
-            this._http.put(this.apiURL + "/" + id, user, {
-                //headers: this.headers
-            })
-            .map((res: Response) => res.json())
-            .subscribe(
-                (res) => {
-                    resolve(res);
-                },
-                (error) => {
-                    reject(error);
-                }
-            );
-        })
+        let headers = new Headers();
+        headers.append('Content-Type', 'x-www-form-urlencoded');
+        headers.append('X-Requested-Width', 'XMLHttpRequest');
+
+        return this._http
+                    .put(this.apiURL + "/" + user.id, JSON.stringify(user), {headers: headers})
+                    .map((res: Response) => res.json());                    
     }
 
 

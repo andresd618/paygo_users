@@ -15,9 +15,13 @@
 
 <tr *ngIf="isUpdate">
   
-  <td>{{user.id}}</td>
-  <td><input type="text" id="name"   [(ngModel)]="user.name" class="form-control" required></td>
-  <td><input type="text" id="lastname"    [(ngModel)]="user.lastname" class="form-control" required></td>
-  <td><button class="btn btn-primary"  type="button" (click)="saveUser(user)">Guardar</button></td>
+  <td>{{userEdit.id}}</td>
+  <td><input type="text" id="name" pattern="[A-Za-z0-9\s]{2,}"  [(ngModel)]="userEdit.name" class="form-control" required></td>
+  <td><input type="text" id="lastname" pattern="[A-Za-z0-9\s]{2,}"   [(ngModel)]="userEdit.lastname" class="form-control" required></td>
+  <td>
+    <button class="btn btn-primary btn-xs"  type="button" (click)="saveUser(userEdit)">Guardar</button>
+    <button class="btn btn-primary btn-xs"  type="button" (click)="cancelEdit()">Cancelar</button>
+  </td>
  
 </tr>
+

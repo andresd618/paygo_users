@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild  } from '@angular/core';
 //import { Router } from '@angular/router';
 import {ApirestService} from "../../../services/users/apirest.service";
 import { FormControl,FormBuilder, FormGroup} from '@angular/forms';
@@ -18,6 +18,8 @@ export class UploadComponent implements OnInit {
   file : File;
   formUploadUsers : FormGroup;
 
+  @ViewChild('inpFileUpload')
+  inpFileUpload: any;
 
   constructor(/*private _router: Router,*/private _api : ApirestService) {
      this.formUploadUsers = new FormGroup({});
@@ -46,6 +48,9 @@ export class UploadComponent implements OnInit {
   }
 
 
+  /**
+   * Realiza la importacion de usuarios desde el archivo CSV
+   */
   uploadUsers(){
 
       this._api.uploadUsers(this.file).subscribe(
@@ -56,27 +61,32 @@ export class UploadComponent implements OnInit {
               }else{
                 this.warningMsg = res.msg;
               }
+
+              //Se limpia el input file
+              this.inpFileUpload.nativeElement.value = "";
           },
           (error) => {
             
             let errors = error.json();
-            this.errors = errors['msg'];
+            this.errors = errors.msg;
           }
       );
   }
 
 
   /**
-   * Se carga el archivo CSV e inicia la importacion de los usuarios
+   * Elimina los usuarios registrados en la bd y Se carga el archivo CSV e inicia la importacion de los usuarios
    */
   onSubmit(){
 
+      //Se valida que se haya seleccionado un archivo 
       if(this.file){
 
           this.cleanMsgs();
 
           ///Primero se eliminan los usuarios de la bd (truncate)
           this._api.deleteAllUsers().subscribe(
+
               (res) => {
                   if(res.status){
                     ///Si se eliminan los usuarios se cargan los nuevos
