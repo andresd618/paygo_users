@@ -132,6 +132,9 @@ class UsersService {
                                 $success = false;
                                 $response->msg = "No se crearon todos los usuarios, algunos datos del archivo estan vacios y/o duplicados, verifique.";
                                 continue;
+                            }else{
+                                ///Si se crea al menos un usuario se retorna estado exitoso
+                                $codeHTTP = 200;
                             }
                         }
                     }  
@@ -253,13 +256,13 @@ class UsersService {
     public function truncate(){
         
         $statusHTTP = 200;
-        $responseObj = (object) ['status' => false,'msg' => 'Se eliminaron correctamente todos los usuarios.'];        
+        $responseObj = (object) ['status' => true,'msg' => 'Se eliminaron correctamente todos los usuarios.'];        
         
         $truncated = $this->usersRepo->truncate();
         
         if(!$truncated){
             $statusHTTP = 500;
-            $responseObj = (object) ['status' => false,'msg' => 'No se eliminaron los usuarios.'];
+            $responseObj = (object) ['status' => false,'msg' => 'No se eliminaron los usuarios existentes.'];
         }
         
         return response()->json($responseObj,$statusHTTP);

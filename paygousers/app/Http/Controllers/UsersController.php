@@ -7,6 +7,7 @@ use Validator;
 use Illuminate\Http\Request;
 use App\Services\Users\UsersService;
 use \App\Http\Requests\UserFormRequest;
+use \Illuminate\Support\Facades\Log;
 
 class UsersController extends Controller
 {
@@ -44,7 +45,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {     
-        if($request->ajax()){
+//        if($request->ajax()){
 
             $response = null;               
 
@@ -63,7 +64,7 @@ class UsersController extends Controller
             }
 
             return $response;
-        }
+//        }
     }
 
     
