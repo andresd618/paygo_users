@@ -25,11 +25,8 @@ export class UploadComponent implements OnInit {
      this.formUploadUsers = new FormGroup({});
    }
 
+   ngOnInit(){}
    
-
-  ngOnInit() {
-  }
-
   /**
    * Limpia los mensajes de exito, error y warning
    */
@@ -67,8 +64,7 @@ export class UploadComponent implements OnInit {
           },
           (error) => {
             
-            let errors = error.json();
-            this.errors = errors.msg;
+            this.errors = error.json().msg;            
           }
       );
   }
@@ -86,7 +82,6 @@ export class UploadComponent implements OnInit {
 
           ///Primero se eliminan los usuarios de la bd (truncate)
           this._api.deleteAllUsers().subscribe(
-
               (res) => {
                   if(res.status){
                     ///Si se eliminan los usuarios se cargan los nuevos
@@ -96,11 +91,9 @@ export class UploadComponent implements OnInit {
                   }
               },
               (error) => {
-                let errors = error.json();
-                this.errors = errors['msg'];
+                this.errors = error.json().msg;                
               }            
-          );
-          
+          );          
       }else{
         this.errors = "Debe selecccionar un archivo CSV para importar los usuarios.";
       }

@@ -6,7 +6,7 @@
   <td>
     <div class="checkbox">
       <label>
-        <input class="chck_delete" type="checkbox" value="">        
+        <input [checked]="isChecked" (change)="isChecked = !isChecked" class="chck_delete" type="checkbox" value="">        
       </label>
     </div>
   </td>

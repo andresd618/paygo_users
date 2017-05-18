@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, ViewContainerRef, QueryList } from '@angular/core';
 import {ApirestService} from "../../../services/users/apirest.service";
 import {IUser} from '../../../interfaces/IUser';
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
 import { FormControl,FormBuilder, FormGroup} from '@angular/forms';
+import {RecordComponent} from '../record/record.component';
+import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 
 
@@ -15,7 +17,8 @@ import { FormControl,FormBuilder, FormGroup} from '@angular/forms';
 })
 export class ListComponent implements OnInit {
 
-  
+  @ViewChildren(RecordComponent) recordComponents: QueryList<RecordComponent>;
+  checkAll : boolean = false;
   numrecords : number;
   typeorder : string;  
   currentPage : number = 1;
@@ -28,7 +31,10 @@ export class ListComponent implements OnInit {
   };
 
 
-  constructor(private _api : ApirestService) {      
+  constructor(vcRef: ViewContainerRef, private _api : ApirestService, private modal : Modal) {      
+
+      modal.overlay.defaultViewContainer = vcRef;
+      this._dataStore = { users: []};
 
       this.infoPagination = {
           total : 0,
@@ -48,10 +54,6 @@ export class ListComponent implements OnInit {
    }
 
 
-
-  ngOnInit() {    
-    this._dataStore = { users: []};
-  }
 
   /**
    * Limpia los mensajes 
@@ -81,13 +83,11 @@ export class ListComponent implements OnInit {
                   itemsPerPage : res.result.per_page,
                   currentPage : res.result.current_page
               };
-              
-              console.log(this.infoPagination);
+                            
               this._dataStore.users = res.result.data;
           },
           (error) => {
-            let erorrs = error.json();
-            this.errors = erorrs.msg;
+            this.errors = error.json().msg;            
           }
       );
     }else{
@@ -96,6 +96,80 @@ export class ListComponent implements OnInit {
   }
 
 
+  /**
+   * Muestra la ventana que solicita confirmacion para realizar la eliminacion de los usuarios
+   */
+  confirmDeleteUsers(){
+
+    this.modal.confirm()
+        .size('lg')
+        .isBlocking(true)
+        .showClose(true)
+        .keyboard(27)
+        .title('Eliminar usuarios')
+        .titleHtml('Eliminar usuarios')
+        .body('Desea elminar los usuarios seleccionados?')
+        .open()
+        .then((dialog:any) => {return dialog.result})
+        .then((result:any) => {this.deleteUsers()});  ///Si acepta la confirmacion se eliminan los usuarios        
+  }
+
+  /**
+   * Se eliminan los usuarios seleccionados
+   */
+  deleteUsers(){
+
+      let userIDS : number[]= []; 
+
+      //Se obtienen los ids de los usuarios seleccionados para eliminar
+      this.recordComponents.forEach(function(recordUser){
+          console.log(recordUser);
+          if(recordUser.isChecked){
+              userIDS.push(recordUser.user.id);
+          }          
+      });
+
+      //Si hay usuarios seleccionados para eliminar se eliminan
+      if(userIDS && userIDS.length > 0){
+
+          this._api.deleteUsers(userIDS) .subscribe(
+            (res) => {
+                this.consultUsers(this.currentPage);  ///Si se eliminan, se vuelve a hacer la consulta al server
+                this.mostrarModalAlert('Usuarios eliminados',res.msg);///Mostrar modal exito
+            }, 
+            (error) => {                
+                this.mostrarModalAlert('Eliminación de usuarios', error.json().msg);///Mostrar modal error
+            }
+          );
+      }else{
+        this.mostrarModalAlert('Eliminación de usuarios', 'Debe seleccionar usuarios para eliminar.');///Mostrar modal error
+      }
+  }
+  
+
+  mostrarModalAlert(titulo : string, texto : string){
+
+    this.modal.alert()
+      .size('lg')
+      .isBlocking(true)
+      .showClose(true)
+      .keyboard(27)
+      .title(titulo)
+      .titleHtml(titulo)
+      .body(texto)
+      .open();
+  }
+
+  /**
+   * selecciona/deselecciona todos los checkbox cuando cambia el valor del check Todos
+  */
+  checkDeleteAll(){
+      this.checkAll = !this.checkAll;
+  }
+
+  /**
+   * Conslta los usuarios correspondientes a una pagina seleccionada en el paginador
+   */
   public pageChanged(event : any){
 
     this.consultUsers(event);    
@@ -114,5 +188,5 @@ export class ListComponent implements OnInit {
   }
 
  
-
+  ngOnInit(){}
 }

@@ -13,6 +13,7 @@ export class RecordComponent implements OnInit {
   userEdit : IUser;
   @Input('user') user : IUser;
   @Input('isUpdate') isUpdate : boolean = false;
+  @Input('isChecked') isChecked : boolean = false;
 
   constructor(private _api : ApirestService) { }
 
@@ -58,7 +59,6 @@ export class RecordComponent implements OnInit {
   }
 
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
 }

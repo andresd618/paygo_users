@@ -8,6 +8,8 @@ import { ListComponent } from './components/users/list/list.component';
 import { UploadComponent } from './components/users/upload/upload.component';
 import { RecordComponent } from './components/users/record/record.component';
 import {Ng2PaginationModule} from 'ng2-pagination'; // <-- import the module
+import { ModalModule } from 'angular2-modal';
+import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
 
 
 @NgModule({
@@ -18,6 +20,9 @@ import {Ng2PaginationModule} from 'ng2-pagination'; // <-- import the module
     RecordComponent,
   ],
   imports: [
+    BrowserModule, 
+    ModalModule.forRoot(),
+    BootstrapModalModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,

@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^4.1.2",
     "@angular/router": "^4.1.2",
     "@angular/router-deprecated": "^2.0.0-rc.2",
+    "angular2-modal": "^2.0.3",
     "bootstrap": "^3.3.7",
     "core-js": "^2.4.1",
     "ng2-pagination": "^2.0.1",

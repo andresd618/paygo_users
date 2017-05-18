@@ -34,14 +34,37 @@
             <th>Id</th>
             <th>Nombre</th>
             <th>Apellido</th>
-            <th><input class="chckall_delete" type="checkbox" value=""></th>
+            <th> 
+              <div class="row">
+                <div class="col-lg-12">   
+                  <button class="btn btn-primary btn-xs"  type="button" (click)="confirmDeleteUsers()">Eliminar</button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <label>
+                    <input class="chckall_delete" (change)="checkDeleteAll()" type="checkbox" value="">
+                    Todos
+                  </label>     
+                </div>    
+              </div>               
+            </th>
           </tr>
         </thead>
-        <tbody class="app-record"  [user]="user" [isUpdate]="false" *ngFor="let user of _dataStore.users | paginate: { 
+        
+        <tbody class="app-record" [isChecked]="checkAll" [user]="user" [isUpdate]="false" *ngFor="let user of _dataStore.users | paginate: { 
                                 itemsPerPage: infoPagination.itemsPerPage, 
                                 currentPage: infoPagination.currentPage, 
                                 totalItems: infoPagination.total}">
-        </tbody>        
+        </tbody>  
+        <tbody>
+          <tr>  
+            <td colspan="3"></td>
+            <td>
+              <button class="btn btn-primary btn-xs"  type="button" (click)="confirmDeleteUsers()">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>      
       </table>
                 
       <pagination-controls class="pags_pagination" maxSize="10" previousLabel="Ant" nextLabel="Sig" (pageChange)="pageChanged($event)"></pagination-controls>

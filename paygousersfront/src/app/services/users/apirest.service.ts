@@ -1,4 +1,4 @@
-import {Http, Headers, Response} from '@angular/http';
+import {Http, Headers, Response, RequestOptions} from '@angular/http';
 import { Injectable } from '@angular/core';
 import {IUser} from '../../interfaces/IUser';
 import {Observable} from 'rxjs/Observable';
@@ -62,7 +62,7 @@ export class ApirestService {
 
 
   /**
-   * Crea en bd los usuarios que contiene el archivo csv 
+   * Retorna un observable que crea en bd los usuarios que contiene el archivo csv 
    */
   public uploadUsers(file : File) : Observable<any>
     {        
@@ -79,7 +79,7 @@ export class ApirestService {
 
 
     /**
-     * Actualiza la informacion de un usuario
+     * Retorna un observable que actualiza la informacion de un usuario
      */
     public updateUser(user : IUser) : Observable<any>
     {
@@ -95,31 +95,28 @@ export class ApirestService {
 
 
     /**
-     * Elimina todos los usuarios incluidos en el array ids
+     * Retorna un observable que elimina todos los usuarios incluidos en el array ids
      */
     public deleteUsers(ids : number[])
     {
-        this._http.delete(this.apiURL,  {
+        
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');
+        headers.append('X-Requested-Width', 'XMLHttpRequest');
 
-            body : {"ids" : ids},
-            //headers: this.headers
+        let opts = new RequestOptions({
+            headers : headers,
+            body: 'ids=' + JSON.stringify(ids)
+        })
 
-        }).subscribe(response => {
-
-            /*this._dataStore.users.forEach((t, i) => {
-
-                ///Si el id esta en el array de eliminados, se elimina del dataStore
-                if (ids.indexOf(t.id) > -1) { this._dataStore.users.splice(i, 1); }
-            });
-
-            this._usersObserver.next(this._dataStore.users);*/
-            
-        }, error => console.log('Error al eliminar los usuarios'));
+        return this._http
+                .delete(this.apiURL,  opts)
+                .map((res: Response) => res.json());                                       
     }
 
 
     /**
-     * Elimina todos los usuarios registrados en la bd
+     * Retorna un observable que elimina todos los usuarios registrados en la bd
      */
     public deleteAllUsers()
     {
@@ -129,7 +126,6 @@ export class ApirestService {
 
         return this._http
                 .delete(this.apiURL + "/truncate",  {headers: headers})
-                .map((res: Response) => res.json());  ;
-                
+                .map((res: Response) => res.json());  ;                
     }
 }
