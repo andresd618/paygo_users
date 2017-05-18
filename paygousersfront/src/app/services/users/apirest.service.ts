@@ -24,14 +24,14 @@ export class ApirestService {
   /**
    * Obtiene los usuarios segun la cantidad de registros a visualizar, el tipo y el campo de ordenamiento
    */
-    public getUsers(num : number, campoOrden : string, tipoOrden : string): Observable<any>{
+    public getUsers(num : number, campoOrden : string, tipoOrden : string, page : number): Observable<any>{
 
         let headers = new Headers();
         headers.append('Content-Type', 'x-www-form-urlencoded');
         headers.append('X-Requested-Width', 'XMLHttpRequest');
 
         return this._http
-                .get(this.apiURL + "/index/" + num + "/" + tipoOrden  + "/" + campoOrden + "/2")
+                .get(this.apiURL + "/index/" + num + "/" + tipoOrden  + "/" + campoOrden + "/" + page)
                 .map((res: Response) => res.json());
   }     
 

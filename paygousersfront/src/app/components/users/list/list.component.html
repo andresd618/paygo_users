@@ -27,8 +27,8 @@
       </div>
     </div>
 
-    <div id="listUsers" class="table-responsive" >
-      <table class="table table-hover table-condensed" *ngIf="_dataStore.users && _dataStore.users?.length > 0 ">
+    <div id="listUsers" class="table-responsive"  *ngIf="_dataStore.users && _dataStore.users?.length > 0 " >
+      <table class="table table-hover table-condensed">
         <thead>
           <tr>
             <th>Id</th>
@@ -37,29 +37,16 @@
             <th><input class="chckall_delete" type="checkbox" value=""></th>
           </tr>
         </thead>
-        <tbody class="app-record"  [user]="user" [isUpdate]="false" *ngFor="let user of _dataStore.users "></tbody>        
+        <tbody class="app-record"  [user]="user" [isUpdate]="false" *ngFor="let user of _dataStore.users | paginate: { 
+                                itemsPerPage: infoPagination.itemsPerPage, 
+                                currentPage: infoPagination.currentPage, 
+                                totalItems: infoPagination.total}">
+        </tbody>        
       </table>
+                
+      <pagination-controls class="pags_pagination" maxSize="10" previousLabel="Ant" nextLabel="Sig" (pageChange)="pageChanged($event)"></pagination-controls>
+    
 
-      <nav aria-label="Page navigation">
-        <ul class="pagination">
-          <li>
-            <a href="#" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          <li><a href="#">1</a></li>
-          <li><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li><a href="#">4</a></li>
-          <li><a href="#">5</a></li>
-          <li>
-            <a href="#" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </div>
 
     <div class="alert alert-warning alert-dismissible" role="alert" *ngIf="!_dataStore.users || _dataStore.users?.length == 0" >
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>

@@ -5,6 +5,8 @@ import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
 import { FormControl,FormBuilder, FormGroup} from '@angular/forms';
 
+
+
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
@@ -13,8 +15,11 @@ import { FormControl,FormBuilder, FormGroup} from '@angular/forms';
 })
 export class ListComponent implements OnInit {
 
+  
   numrecords : number;
   typeorder : string;  
+  currentPage : number = 1;
+  infoPagination : Object;
 
   errors : String = "";
   formListUsers : FormGroup;   
@@ -25,7 +30,16 @@ export class ListComponent implements OnInit {
 
   constructor(private _api : ApirestService) {      
 
-      this.typeorder = 'asc';      
+      this.infoPagination = {
+          total : 0,
+          lastPage : 0,
+          from : 0,
+          to : 0,
+          itemsPerPage : 0,
+          currentPage : 0
+      };
+
+      this.typeorder = 'asc';         
 
       this.formListUsers = new FormGroup({
         numrecords : new FormControl(),
@@ -49,12 +63,26 @@ export class ListComponent implements OnInit {
 
   consultUsers(page : number){
 
+    this.currentPage = page;    
+    this.infoPagination = {};    
+
     if(this.numrecords && this.typeorder){
 
-      this._api.getUsers(this.numrecords, 'name', this.typeorder).subscribe(
+      this._api.getUsers(this.numrecords, 'name', this.typeorder, page).subscribe(
 
         (res) => {
-            
+              
+              this.infoPagination = {
+
+                  total : res.result.total,
+                  lastPage : res.result.last_page,
+                  from : res.result.from,
+                  to : res.result.to,
+                  itemsPerPage : res.result.per_page,
+                  currentPage : res.result.current_page
+              };
+              
+              console.log(this.infoPagination);
               this._dataStore.users = res.result.data;
           },
           (error) => {
@@ -65,6 +93,12 @@ export class ListComponent implements OnInit {
     }else{
       this.errors = "Debe ingresar un valor numerico y seleccionar un tipo de ordenamiento.";
     }
+  }
+
+
+  public pageChanged(event : any){
+
+    this.consultUsers(event);    
   }
 
 

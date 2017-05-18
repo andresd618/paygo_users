@@ -7,19 +7,22 @@ import { AppComponent } from './app.component';
 import { ListComponent } from './components/users/list/list.component';
 import { UploadComponent } from './components/users/upload/upload.component';
 import { RecordComponent } from './components/users/record/record.component';
+import {Ng2PaginationModule} from 'ng2-pagination'; // <-- import the module
+
 
 @NgModule({
   declarations: [
     AppComponent,
     ListComponent,
     UploadComponent,
-    RecordComponent
+    RecordComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule
+    HttpModule,
+    Ng2PaginationModule
   ],
   providers: [],
   bootstrap: [AppComponent]
