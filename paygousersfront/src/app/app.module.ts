@@ -10,6 +10,7 @@ import { RecordComponent } from './components/users/record/record.component';
 import {Ng2PaginationModule} from 'ng2-pagination'; // <-- import the module
 import { ModalModule } from 'angular2-modal';
 import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
+import { NgProgressModule } from 'ng2-progressbar';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    Ng2PaginationModule
+    Ng2PaginationModule,
+    NgProgressModule
   ],
   providers: [],
   bootstrap: [AppComponent]

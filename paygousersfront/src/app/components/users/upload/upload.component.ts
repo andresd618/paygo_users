@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild  } from '@angular/core';
 import {ApirestService} from "app/services/users/apirest.service";
 import { FormControl,FormBuilder, FormGroup} from '@angular/forms';
+import {NgProgressService} from "ng2-progressbar";
+
 
 
 @Component({
@@ -21,7 +23,9 @@ export class UploadComponent implements OnInit {
   @ViewChild('inpFileUpload')
   inpFileUpload: any;
 
-  constructor(private _api : ApirestService) {
+
+  constructor(private _api : ApirestService, private pService: NgProgressService) {
+
      this.formUploadUsers = new FormGroup({});
      this.processing = false;
    }
@@ -54,7 +58,7 @@ export class UploadComponent implements OnInit {
       this._api.uploadUsers(this.file).subscribe(
 
           (res) => {
-              this.processing = false; ///Se habilita el boton subir
+              this.requestInProgress(false);  ///Se habilita el boton subir
 
               if(res.status){
                   this.sucessMsg = res.msg;
@@ -66,12 +70,26 @@ export class UploadComponent implements OnInit {
               this.inpFileUpload.nativeElement.value = "";
           },
           (error) => {
-            this.processing = false;
+            this.requestInProgress(false); 
             this.errors = error.json().msg;            
           }
       );
   }
 
+/**
+ * Controla la barra de progreso y el boton de Subir, dependiendo si la peticion 
+ * upload esta en progreso
+ */
+  requestInProgress(start : boolean){
+
+    if(start){
+        this.pService.start();
+        this.processing = true;
+    }else{
+        this.pService.done();
+        this.processing = true;
+    }
+  }
 
 
   /**
@@ -84,7 +102,7 @@ export class UploadComponent implements OnInit {
 
           this.cleanMsgs();
 
-          this.processing = true; //Se deshabilita el boton subir
+          this.requestInProgress(true); //Se deshabilita el boton subir
 
           ///Primero se eliminan los usuarios de la bd (truncate)
           this._api.deleteAllUsers().subscribe(
@@ -93,12 +111,12 @@ export class UploadComponent implements OnInit {
                     ///Si se eliminan los usuarios se cargan los nuevos
                     this.uploadUsers();
                   }else{
-                    this.processing = false; 
+                    this.requestInProgress(false);                    
                     this.warningMsg = res.msg;
                   }
               },
               (error) => {
-                this.processing = false;
+                this.requestInProgress(false); 
                 this.errors = error.json().msg;                
               }            
           );          
