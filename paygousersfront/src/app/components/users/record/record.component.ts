@@ -1,6 +1,7 @@
-import { Component, Input,OnInit } from '@angular/core';
-import {IUser} from '../../../interfaces/IUser';
-import {ApirestService} from "../../../services/users/apirest.service";
+import { Component, Input,OnInit, ViewContainerRef } from '@angular/core';
+import {IUser} from 'app/interfaces/iuser';
+import {ApirestService} from "app/services/users/apirest.service";
+import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 @Component({
   selector: 'tbody.app-record',
@@ -15,7 +16,9 @@ export class RecordComponent implements OnInit {
   @Input('isUpdate') isUpdate : boolean = false;
   @Input('isChecked') isChecked : boolean = false;
 
-  constructor(private _api : ApirestService) { }
+  constructor(vcRef: ViewContainerRef, private _api : ApirestService, private modal : Modal) {
+      modal.overlay.defaultViewContainer = vcRef;
+   }
 
   /**
    * Se habilitan los campos para editar el usuario
@@ -40,11 +43,11 @@ export class RecordComponent implements OnInit {
             this.isUpdate = false;
         },
         (error) => {
-
+            this.mostrarModalAlert('Editar usuario','Error al guardar los cambios realizados.');
         }
       );      
     }else{
-      
+      this.mostrarModalAlert('Información incorrecta','Debe ingresar nombre y apellido válidos.');
     }
   }
 
@@ -58,6 +61,22 @@ export class RecordComponent implements OnInit {
     this.userEdit = null;    
   }
 
+
+  /**
+ * Muestra un modal informativo, con el titulo y el contenido 
+ */
+  mostrarModalAlert(titulo : string, texto : string){
+
+    this.modal.alert()
+      .size('lg')
+      .isBlocking(true)
+      .showClose(true)
+      .keyboard(27)
+      .title(titulo)
+      .titleHtml(titulo)
+      .body(texto)
+      .open();
+  }
 
   ngOnInit() {}
 

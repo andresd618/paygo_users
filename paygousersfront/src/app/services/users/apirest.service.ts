@@ -1,6 +1,6 @@
 import {Http, Headers, Response, RequestOptions} from '@angular/http';
 import { Injectable } from '@angular/core';
-import {IUser} from '../../interfaces/IUser';
+import {IUser} from 'app/interfaces/iuser';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/Rx';
 import 'rxjs/add/operator/share';
@@ -34,30 +34,6 @@ export class ApirestService {
                 .get(this.apiURL + "/index/" + num + "/" + tipoOrden  + "/" + campoOrden + "/" + page)
                 .map((res: Response) => res.json());
   }     
-
-
-  /**
-   * Obtiene la informacion de un usuario
-   */
-  public getUser(id : number){
-
-    return new Promise(
-
-      (resolve, reject) => {
-
-        this._http.get(this.apiURL + "/" + id)
-          .map((res: Response) => res.json())
-          .subscribe(
-            (res) => {
-              resolve(res);
-            },
-            (error) => {
-              reject(error);
-            }
-          )
-      }
-    );
-  }
 
 
 
@@ -95,7 +71,7 @@ export class ApirestService {
 
 
     /**
-     * Retorna un observable que elimina todos los usuarios incluidos en el array ids
+     * Retorna un observable que elimina de la bd todos los usuarios incluidos en el array ids
      */
     public deleteUsers(ids : number[])
     {

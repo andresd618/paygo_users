@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren, ViewContainerRef, QueryList } from '@angular/core';
-import {ApirestService} from "../../../services/users/apirest.service";
-import {IUser} from '../../../interfaces/IUser';
+import {ApirestService} from "app/services/users/apirest.service";
+import {IUser} from 'app/interfaces/iuser';
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
 import { FormControl,FormBuilder, FormGroup} from '@angular/forms';
@@ -62,7 +62,9 @@ export class ListComponent implements OnInit {
     this.errors = "";   
   }
 
-
+/**
+ * Realiza la consulta de los usuarios segun la pagina, el orden y la cantidad de registros a consultar por pag
+ */
   consultUsers(page : number){
 
     this.currentPage = page;    
@@ -75,7 +77,6 @@ export class ListComponent implements OnInit {
         (res) => {
               
               this.infoPagination = {
-
                   total : res.result.total,
                   lastPage : res.result.last_page,
                   from : res.result.from,
@@ -146,7 +147,9 @@ export class ListComponent implements OnInit {
       }
   }
   
-
+/**
+ * Muestra un modal informativo, con el titulo y el contenido 
+ */
   mostrarModalAlert(titulo : string, texto : string){
 
     this.modal.alert()

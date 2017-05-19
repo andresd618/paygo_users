@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild  } from '@angular/core';
-//import { Router } from '@angular/router';
-import {ApirestService} from "../../../services/users/apirest.service";
+import {ApirestService} from "app/services/users/apirest.service";
 import { FormControl,FormBuilder, FormGroup} from '@angular/forms';
 
 
@@ -21,7 +20,7 @@ export class UploadComponent implements OnInit {
   @ViewChild('inpFileUpload')
   inpFileUpload: any;
 
-  constructor(/*private _router: Router,*/private _api : ApirestService) {
+  constructor(private _api : ApirestService) {
      this.formUploadUsers = new FormGroup({});
    }
 
