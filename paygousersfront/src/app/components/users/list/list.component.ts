@@ -86,6 +86,7 @@ export class ListComponent implements OnInit {
               };
                             
               this._dataStore.users = res.result.data;
+
           },
           (error) => {
             this.errors = error.json().msg;            
@@ -135,32 +136,36 @@ export class ListComponent implements OnInit {
 
           this._api.deleteUsers(userIDS) .subscribe(
             (res) => {
-                this.consultUsers(this.currentPage);  ///Si se eliminan, se vuelve a hacer la consulta al server
-                this.mostrarModalAlert('Usuarios eliminados',res.msg);///Mostrar modal exito
+                //this.consultUsers(this.currentPage);  ///Si se eliminan, se vuelve a hacer la consulta al server                
+                this.mostrarModalAlert('Eliminación de usuarios', res.msg, true);///Mostrar modal error
             }, 
             (error) => {                
-                this.mostrarModalAlert('Eliminación de usuarios', error.json().msg);///Mostrar modal error
+                this.mostrarModalAlert('Eliminación de usuarios', error.json().msg, false);///Mostrar modal error
             }
           );
       }else{
-        this.mostrarModalAlert('Eliminación de usuarios', 'Debe seleccionar usuarios para eliminar.');///Mostrar modal error
+        this.mostrarModalAlert('Eliminación de usuarios', 'Debe seleccionar usuarios para eliminar.', false);///Mostrar modal error
       }
   }
   
+
+
 /**
  * Muestra un modal informativo, con el titulo y el contenido 
  */
-  mostrarModalAlert(titulo : string, texto : string){
+  mostrarModalAlert(titulo : string, texto : string, refresh : boolean){
 
     this.modal.alert()
       .size('lg')
       .isBlocking(true)
-      .showClose(true)
-      .keyboard(27)
+      .showClose(false)
+      .keyboard(19)
       .title(titulo)
       .titleHtml(titulo)
       .body(texto)
-      .open();
+      .open()
+      .then((dialog:any) => {return dialog.result})
+      .then((result:any) => {if(refresh) {this.consultUsers(this.currentPage)}});
   }
 
   /**
